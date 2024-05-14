@@ -1,0 +1,33 @@
+# See https://pre-commit.com/ for more information
+# See https://pre-commit.com/hooks.html for more hooks
+
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    # Ruff version.
+    rev: v0.4.3
+    hooks:
+      # Run the linter.
+      - id: ruff
+        # Run the formatter.
+      - id: ruff-format
+###################################################
+  # ### Standard Pre-commit Hooks
+  # ###########################################################################
+  # Pre-commit hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.1.0
+    hooks:
+      # checks for files that would conflict in case-insensitive filesystems.
+      - id: check-case-conflict
+      # checks for files that contain merge conflict strings.
+      - id: check-merge-conflict
+      # checks yaml files for parseable syntax.
+      - id: check-yaml
+      # detects the presence of private keys.
+      - id: detect-private-key
+      # ensures that a file is either empty, or ends with one newline.
+      - id: end-of-file-fixer
+      # removes utf-8 byte order marker.
+      - id: fix-byte-order-marker
+      # replaces or checks mixed line ending.
+      - id: mixed-line-ending

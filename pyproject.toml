@@ -1,0 +1,28 @@
+[project]
+name = "whatsapp_transcribe"
+version = "0.1.0"
+description = "Transcriptions of Whatsapp Voice Messages"
+authors = [
+    {name = "Sebastian Moßburger", email = "sebastian-markgraf@t-online.de"},
+]
+dependencies = [
+    "faster-whisper>=1.0.2",
+]
+requires-python = ">=3.9"
+readme = "README.md"
+license = {text = "MIT"}
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+
+[tool.pdm]
+distribution = true
+
+[tool.pdm.dev-dependencies]
+dev = [
+    "pre-commit>=3.7.0",
+    "ruff>=0.4.3",
+    "pytest>=8.2.0",
+]
