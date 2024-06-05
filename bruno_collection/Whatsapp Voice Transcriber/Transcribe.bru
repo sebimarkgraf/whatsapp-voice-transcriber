@@ -6,6 +6,10 @@ meta {
 
 post {
   url: {{baseURL}}/transcribe
-  body: none
+  body: multipartForm
   auth: none
+}
+
+body:multipart-form {
+  voice_message: @file(WhatsApp Ptt 2024-02-26 at 12.08.03.ogg)
 }

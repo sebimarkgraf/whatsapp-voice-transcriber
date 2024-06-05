@@ -1,15 +1,22 @@
-from fastapi import FastAPI, UploadFile, File, Request, HTTPException, Header, Form, Response, BackgroundTasks
+from fastapi import (
+    FastAPI,
+    UploadFile,
+    Request,
+    HTTPException,
+    Header,
+    Form,
+    Response,
+    BackgroundTasks,
+)
 from .transcribe import TranscriptionService
 from .twilio_client import TwilioClient
-from pydantic import BaseModel
 from typing import Annotated
-from twilio.twiml.messaging_response import MessagingResponse
-import requests
-import io
 import logging
 from dataclasses import dataclass
+from .summarize import Summarizer
 
 transcription_service = TranscriptionService()
+summarization_service = Summarizer()
 twilio_client = TwilioClient()
 
 app = FastAPI()
@@ -27,8 +34,9 @@ async def transcribe(voice_message: UploadFile):
     if not voice_message.content_type.startswith("audio"):
         raise HTTPException(status_code=400, detail="File must be an audio file")
     transcription = transcription_service.transcribe(voice_message.file)
+    summary = summarization_service.summarize("".join(transcription))
 
-    return {"transcription": "".join(transcription)}
+    return {"transcription": "".join(transcription), "summary": summary}
 
 
 @dataclass()
@@ -36,18 +44,27 @@ class TranscriptionTask:
     media_url: str
     from_number: str
 
+
 def perform_transcription(task: TranscriptionTask):
     logger.info("Media URL found, downloading...")
     content = twilio_client.download_media(task.media_url)
     logger.info("Media downloaded.")
 
     transcription = transcription_service.transcribe(content)
+    summary = summarization_service.summarize("".join(transcription))
 
-    twilio_client.send_message(task.from_number, f"Transcription: {''.join(transcription)}")
+    twilio_client.send_message(task.from_number, f"Summarized: {summary}")
 
 
 @app.post("/twilio-whatsapp")
-async def twilio_whatsapp(background_tasks: BackgroundTasks, req: Request, From: str = Form(...), Body: Annotated[str | None, Form()] = None, x_twilio_signature: Annotated[str | None, Header()] = None, MediaUrl0: Annotated[str | None, Form()] = None ):
+async def twilio_whatsapp(
+    background_tasks: BackgroundTasks,
+    req: Request,
+    From: str = Form(...),
+    Body: Annotated[str | None, Form()] = None,
+    x_twilio_signature: Annotated[str | None, Header()] = None,
+    MediaUrl0: Annotated[str | None, Form()] = None,
+):
     form_ = await req.form()
     twilio_client.validateRequest(req.url, form_, x_twilio_signature)
 

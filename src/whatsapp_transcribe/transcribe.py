@@ -4,7 +4,12 @@ from io import BytesIO
 
 model_size = os.environ.get("MODEL_SIZE", "small")
 
+
 class TranscriptionService:
+    """
+    Simple transcription service returning a Iterable of extracted Segments
+    """
+
     def __init__(self):
         self.whisper_model = WhisperModel(model_size, device="cpu")
 
