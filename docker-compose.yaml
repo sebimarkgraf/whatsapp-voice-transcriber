@@ -1,0 +1,13 @@
+
+
+services:
+  whatsapp-transcribe:
+    build: .
+    restart: always
+
+  tunnel:
+    image: cloudflare/cloudflared
+    restart: always
+    command: tunnel run
+    environment:
+      - TUNNEL_TOKEN=$TUNNEL_TOKEN
