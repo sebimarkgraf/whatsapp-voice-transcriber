@@ -20,6 +20,7 @@ TWILIO_ACCOUNT_SID=<Account Sid>
 TWILIO_AUTH_TOKEN=<Auth Token>
 TWILIO_PHONE_NUMBER=whatsapp:<twilio phone number>
 TUNNEL_TOKEN=<Cloud Flare Tunnel Token>
+API_KEY=<Random API key e.g. (openssl rand -hex 32)>
 ```
 
 
