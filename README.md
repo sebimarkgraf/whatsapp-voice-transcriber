@@ -1,4 +1,5 @@
-# WhatsApp Transcribe
+<img src="/logo.png" alt="image" width="300" height="auto">
+# VoxDigest - A WhatsApp Transcription Service
 
 A simple project that create a Twilio Whatsapp Bot to transcribe voice messages.
 
