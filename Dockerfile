@@ -2,7 +2,6 @@ ARG PYTHON_BASE=3.10-slim
 
 FROM python:$PYTHON_BASE as builder
 
-MAINTAINER Sebastian Moßburger <sebastian-markgraf@t-online.de>
 
 WORKDIR /backend
 
@@ -15,6 +14,10 @@ RUN pdm install --check --prod --no-editable
 
 
 FROM python:$PYTHON_BASE
+
+
+MAINTAINER Sebastian Moßburger <sebastian-markgraf@t-online.de>
+EXPOSE 80
 
 COPY --from=builder /backend/.venv/ /backend/.venv/
 ENV PATH="/backend/.venv/bin:$PATH"
