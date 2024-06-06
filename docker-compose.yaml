@@ -4,6 +4,9 @@ services:
   whatsapp-transcribe:
     build: .
     restart: always
+    env_file: .env
+    ports:
+      - 80:80
 
   tunnel:
     image: cloudflare/cloudflared
