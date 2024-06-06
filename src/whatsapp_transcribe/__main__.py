@@ -14,12 +14,16 @@ from typing import Annotated
 import logging
 from dataclasses import dataclass
 from .summarize import Summarizer
+from .authentication import setup_api_key_auth
+from fastapi.security import APIKey, Security
 
 transcription_service = TranscriptionService()
 summarization_service = Summarizer()
 twilio_client = TwilioClient()
 
 app = FastAPI()
+
+get_api_key = setup_api_key_auth()
 
 logger = logging.getLogger(__name__)
 
@@ -30,7 +34,9 @@ async def health():
 
 
 @app.post("/transcribe")
-async def transcribe(voice_message: UploadFile):
+async def transcribe(
+    voice_message: UploadFile, api_key: APIKey = Security(get_api_key)
+):
     if not voice_message.content_type.startswith("audio"):
         raise HTTPException(status_code=400, detail="File must be an audio file")
     transcription = transcription_service.transcribe(voice_message.file)
