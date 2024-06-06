@@ -7,6 +7,7 @@ from fastapi import (
     Form,
     Response,
     BackgroundTasks,
+    Security,
 )
 from .transcribe import TranscriptionService
 from .twilio_client import TwilioClient
@@ -15,7 +16,7 @@ import logging
 from dataclasses import dataclass
 from .summarize import Summarizer
 from .authentication import setup_api_key_auth
-from fastapi.security import APIKey, Security
+from fastapi.security.api_key import APIKey
 
 transcription_service = TranscriptionService()
 summarization_service = Summarizer()
