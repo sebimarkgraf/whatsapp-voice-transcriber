@@ -19,6 +19,10 @@ FROM python:$PYTHON_BASE
 MAINTAINER Sebastian Moßburger <sebastian-markgraf@t-online.de>
 EXPOSE 80
 
+# Set cache directory for Huggingface models. Includes all projects build upon such as faster-whisper
+ENV HF_HUB_CACHE="/backend/.model_cache/huggingface"
+ENV PYTHONUNBUFFERED=1
+
 COPY --from=builder /backend/.venv/ /backend/.venv/
 ENV PATH="/backend/.venv/bin:$PATH"
 

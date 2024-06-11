@@ -5,6 +5,9 @@ services:
     build: .
     restart: always
     env_file: .env
+    volumes:
+      - model_cache:/backend/.model_cache/
+
     ports:
       - 80:80
 
@@ -14,3 +17,7 @@ services:
     command: tunnel run
     environment:
       - TUNNEL_TOKEN=$TUNNEL_TOKEN
+
+
+volumes:
+  model_cache:

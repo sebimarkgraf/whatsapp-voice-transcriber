@@ -18,6 +18,7 @@ from .summarize import Summarizer
 from .authentication import setup_api_key_auth
 from fastapi.security.api_key import APIKey
 
+
 transcription_service = TranscriptionService()
 summarization_service = Summarizer()
 twilio_client = TwilioClient()

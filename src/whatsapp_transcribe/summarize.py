@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 from langchain_core.prompts import PromptTemplate
-from langchain.chains.llm import LLMChain
 
 from textwrap import dedent
-from langchain_community.llms import Ollama
 import logging
+from langchain_community.chat_models import ChatOllama
+from os import environ
+from typing import Optional
 
 logger = logging.getLogger(__name__)
 
@@ -16,12 +17,22 @@ class Summarizer:
                                  Gebe nur den gekürzten Text zurück:
                                  """)
 
-    def __init__(self, model="superdrew100/llama3-abliterated"):
-        llm = Ollama(model=model)
+    def __init__(self, model: Optional[str] = None):
+        model = (
+            model
+            if model is not None
+            else environ.get(
+                "SUMMARIZE_MODEL", "DiscoResearch/Llama3-DiscoLeo-Instruct-8B-v0.1"
+            )
+        )
+        llm = ChatOllama(
+            base_url=environ.get("OLLAMA_HOST", "http://localhost:11434"),
+            model=model,
+        )
         prompt_template = PromptTemplate.from_template(self.PROMPT_TEMPLATE)
 
-        self.llm_chain = LLMChain(llm=llm, prompt=prompt_template)
+        self.llm_chain = prompt_template | llm
 
     def summarize(self, text: str) -> str:
         logger.debug(f"Summarizing: {text}")
-        return self.llm_chain.invoke(text)
+        return dict(self.llm_chain.invoke(text))["content"]
