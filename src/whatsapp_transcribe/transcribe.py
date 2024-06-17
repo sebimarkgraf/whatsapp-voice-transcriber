@@ -1,13 +1,15 @@
 """
 # Transcription
 
-This module contains the TranscriptionService class which is responsible for transcribing voice messages.
+This module contains the TranscriptionService class
+which is responsible for transcribing voice messages.
 """
 
-from faster_whisper import WhisperModel
 from io import BytesIO
 from os import environ
 from typing import Optional
+
+from faster_whisper import WhisperModel
 
 
 class TranscriptionService:
@@ -21,7 +23,9 @@ class TranscriptionService:
         Create a transcription service and load the transcription model into RAM.
 
         Args:
+        ----
             model_size: Whisper model size possible options: "small", "medium", "large"
+
         """
         model_size = (
             model_size

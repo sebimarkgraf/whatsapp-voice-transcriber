@@ -1,7 +1,8 @@
+from os import environ
+from pathlib import Path
+
 from fastapi.testclient import TestClient
 from whatsapp_transcribe.__main__ import app
-from pathlib import Path
-from os import environ
 
 test_dir = Path(__file__).parent
 

@@ -1,23 +1,24 @@
-from fastapi import (
-    FastAPI,
-    UploadFile,
-    Request,
-    HTTPException,
-    Header,
-    Form,
-    Response,
-    BackgroundTasks,
-    Security,
-)
-from .transcribe import TranscriptionService
-from .twilio_client import TwilioClient
-from typing import Annotated
 import logging
 from dataclasses import dataclass
-from .summarize import Summarizer
-from .authentication import setup_api_key_auth
+from typing import Annotated
+
+from fastapi import (
+    BackgroundTasks,
+    FastAPI,
+    Form,
+    Header,
+    HTTPException,
+    Request,
+    Response,
+    Security,
+    UploadFile,
+)
 from fastapi.security.api_key import APIKey
 
+from .authentication import setup_api_key_auth
+from .summarize import Summarizer
+from .transcribe import TranscriptionService
+from .twilio_client import TwilioClient
 
 transcription_service = TranscriptionService()
 summarization_service = Summarizer()
@@ -75,7 +76,7 @@ async def twilio_whatsapp(
 ):
     logger.info(f"Received message from {From}")
     form_ = await req.form()
-    twilio_client.validateRequest(form_, x_twilio_signature)
+    twilio_client.validate_request(form_, x_twilio_signature)
 
     if MediaUrl0 is None and not Body:
         return Response(content="No message or media found", status_code=400)

@@ -1,21 +1,22 @@
 #!/usr/bin/env python3
-from langchain_core.prompts import PromptTemplate
-
-from textwrap import dedent
 import logging
-from langchain_community.chat_models import ChatOllama
 from os import environ
+from textwrap import dedent
 from typing import Optional
+
+from langchain_community.chat_models import ChatOllama
+from langchain_core.prompts import PromptTemplate
 
 logger = logging.getLogger(__name__)
 
 
 class Summarizer:
-    PROMPT_TEMPLATE = dedent("""Schreibe eine kurze deutsche Version der folgenden Sprachnachricht:
-                                 "{text}"
-                                 Wenn möglich, gliedere die Nachricht in Abschnitte und ergänze Überschriften.
-                                 Gebe nur den gekürzten Text zurück:
-                                 """)
+    PROMPT_TEMPLATE = dedent("""
+    Schreibe eine kurze deutsche Version der folgenden Sprachnachricht:
+    "{text}"
+    Wenn möglich, gliedere die Nachricht in Abschnitte und ergänze Überschriften.
+    Gebe nur den gekürzten Text zurück:
+    """)
 
     def __init__(self, model: Optional[str] = None):
         model = (

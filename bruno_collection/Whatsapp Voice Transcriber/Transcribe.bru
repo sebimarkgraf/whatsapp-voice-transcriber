@@ -7,9 +7,13 @@ meta {
 post {
   url: {{baseURL}}/transcribe
   body: multipartForm
-  auth: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{apiKey}}
 }
 
 body:multipart-form {
-  voice_message: @file(WhatsApp Ptt 2024-02-26 at 12.08.03.ogg)
+  voice_message: @file(/Users/sebbo/Downloads/vani_transcription/WhatsApp Audio 2024-02-08 at 11.00.32.ogg)
 }
