@@ -111,7 +111,7 @@ class TwilioClient:
         )
 
     def send_message(self, to: str, body: str):
-        self._logger.verbose(f"Sending message to {to}")
+        self._logger.debug(f"Sending message to {to}")
         self.client.messages.create(
             to=to,
             from_=self._from_number,
