@@ -2,15 +2,13 @@ from os import environ
 from pathlib import Path
 
 from fastapi.testclient import TestClient
-from whatsapp_transcribe.__main__ import app
 
 test_dir = Path(__file__).parent
 
 
-environ["TWILIO_AUTH_TOKEN"] = "Placeholder"
-
-
 def test_transcribe_endpoint_success():
+    from whatsapp_transcribe.__main__ import app
+
     client = TestClient(app)
 
     headers = {"authorization": "Bearer " + environ.get("API_KEY")}
@@ -25,5 +23,16 @@ def test_transcribe_endpoint_success():
             )
         },
         headers=headers,
+    )
+    assert response.status_code == 200
+
+
+def test_health_endpoint():
+    from whatsapp_transcribe.__main__ import app
+
+    client = TestClient(app)
+
+    response = client.get(
+        "/health",
     )
     assert response.status_code == 200
