@@ -73,13 +73,15 @@ async def twilio_whatsapp(
     x_twilio_signature: Annotated[str | None, Header()] = None,
     MediaUrl0: Annotated[str | None, Form()] = None,
 ):
+    logger.info(f"Received message from {From}")
     form_ = await req.form()
-    twilio_client.validateRequest(req.url, form_, x_twilio_signature)
+    twilio_client.validateRequest(form_, x_twilio_signature)
 
     if MediaUrl0 is None and not Body:
         return Response(content="No message or media found", status_code=400)
 
     if MediaUrl0 is None:
+        logger.info("No media found, echoing message")
         return twilio_client.create_return_message(f"Echo: {Body}")
 
     background_tasks.add_task(perform_transcription, TranscriptionTask(MediaUrl0, From))

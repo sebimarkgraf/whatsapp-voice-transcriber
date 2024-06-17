@@ -24,7 +24,9 @@ class TranscriptionService:
             model_size: Whisper model size possible options: "small", "medium", "large"
         """
         model_size = (
-            model_size if model_size is not None else environ.get("MODEL_SIZE", "small")
+            model_size
+            if model_size is not None
+            else environ.get("TRANSCRIBE_MODEL", "small")
         )
         self.whisper_model = WhisperModel(model_size, device="cpu")
 

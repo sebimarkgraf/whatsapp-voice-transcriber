@@ -1,4 +1,3 @@
-
 from twilio.rest import Client
 from twilio.request_validator import RequestValidator
 import os
@@ -11,25 +10,30 @@ from base64 import b64encode
 
 logger = logging.getLogger(__name__)
 
+
 class TwilioClient:
     def __init__(self):
         self._auth_token = os.environ["TWILIO_AUTH_TOKEN"]
         self._account_sid = os.environ["TWILIO_ACCOUNT_SID"]
-        self.client =  Client(self._account_sid, self._auth_token)
+        self._webhook_url = os.environ["TWILIO_WEBHOOK_URL"]
+        self.client = Client(self._account_sid, self._auth_token)
         self.validator = RequestValidator(self._auth_token)
 
-    def validateRequest(self, url, body, signature):
-        if not self.validator.validate(str(url), body, signature):
+    def validateRequest(self, body, signature):
+        if not self.validator.validate(str(self._webhook_url), body, signature):
+            logger.error("Invalid Twilio signature")
             raise HTTPException(status_code=403, detail="Invalid Twilio signature")
         return True
 
     def create_return_message(self, message):
         response = MessagingResponse()
-        msg = response.message(self.shorten_message(message))
+        response.message(self.shorten_message(message))
         return Response(content=str(response), media_type="application/xml")
 
     def _auth_header(self):
-        token = b64encode(bytes(f"{self._account_sid}:{self._auth_token}", "utf-8")).decode("utf-8")
+        token = b64encode(
+            bytes(f"{self._account_sid}:{self._auth_token}", "utf-8")
+        ).decode("utf-8")
         return {"Authorization": f"Basic {token}"}
 
     def download_media(self, url):
@@ -43,4 +47,8 @@ class TwilioClient:
         return message[:1500] + "..." if len(message) > 1500 else message
 
     def send_message(self, to, body):
-        self.client.messages.create(to=to, from_=os.environ["TWILIO_PHONE_NUMBER"], body=self.shorten_message(body))
+        self.client.messages.create(
+            to=to,
+            from_=os.environ["TWILIO_PHONE_NUMBER"],
+            body=self.shorten_message(body),
+        )
