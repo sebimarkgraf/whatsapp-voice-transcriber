@@ -11,12 +11,22 @@ logger = logging.getLogger(__name__)
 
 
 class Summarizer:
-    PROMPT_TEMPLATE = dedent("""
+    """
+    Summarize a text using an LLM.
+
+    This class is responsible for summarizing a text using an LLM.
+    The LLM serving is done externally by the Ollama service.
+    """
+
+    PROMPT_TEMPLATE = environ.get(
+        "SUMMARIZE_PROMPT",
+        dedent("""
     ###Instruction###
     Write a short German summary of the following voice message: "{text}".
     If possible, organize the summary into sections.
     Return only the condensed text.
-    """)
+    """),
+    )
 
     def __init__(self, model: Optional[str] = None):
         model = (
@@ -35,5 +45,16 @@ class Summarizer:
         self.llm_chain = prompt_template | llm
 
     def summarize(self, text: str) -> str:
+        """
+        Summarize the text given as a string with the model defined on the summarizer.
+
+        Tries to create a short and concise summary.
+
+        Args:
+            text: The text to summarize
+
+        Returns:
+            string: summarized version of the text
+        """
         logger.debug(f"Summarizing: {text}")
         return dict(self.llm_chain.invoke(text))["content"]
