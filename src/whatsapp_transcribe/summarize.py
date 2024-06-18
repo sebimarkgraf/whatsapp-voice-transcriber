@@ -12,10 +12,10 @@ logger = logging.getLogger(__name__)
 
 class Summarizer:
     PROMPT_TEMPLATE = dedent("""
-    Schreibe eine kurze deutsche Version der folgenden Sprachnachricht:
-    "{text}"
-    Wenn möglich, gliedere die Nachricht in Abschnitte und ergänze Überschriften.
-    Gebe nur den gekürzten Text zurück:
+    ###Instruction###
+    Write a short German summary of the following voice message: "{text}".
+    If possible, organize the summary into sections.
+    Return only the condensed text.
     """)
 
     def __init__(self, model: Optional[str] = None):

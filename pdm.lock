@@ -5,7 +5,7 @@
 groups = ["default", "dev"]
 strategy = ["cross_platform", "inherit_metadata"]
 lock_version = "4.4.1"
-content_hash = "sha256:d185c3cc482e0965c738a316eed1db6f5cc4c57fe320ba9af5008152542ac6d5"
+content_hash = "sha256:d095c8b9ef653a4088cf10409e683c9d633059bce7e0a13649472254d16a8f78"
 
 [[package]]
 name = "aiohttp"
@@ -1037,7 +1037,7 @@ files = [
 
 [[package]]
 name = "langchain-text-splitters"
-version = "0.2.0"
+version = "0.2.1"
 requires_python = "<4.0,>=3.8.1"
 summary = "LangChain text splitting utilities"
 groups = ["default", "dev"]
@@ -1045,8 +1045,8 @@ dependencies = [
     "langchain-core<0.3.0,>=0.2.0",
 ]
 files = [
-    {file = "langchain_text_splitters-0.2.0-py3-none-any.whl", hash = "sha256:7b4c6a45f8471630a882b321e138329b6897102a5bc62f4c12be1c0b05bb9199"},
-    {file = "langchain_text_splitters-0.2.0.tar.gz", hash = "sha256:b32ab4f7397f7d42c1fa3283fefc2547ba356bd63a68ee9092865e5ad83c82f9"},
+    {file = "langchain_text_splitters-0.2.1-py3-none-any.whl", hash = "sha256:c2774a85f17189eaca50339629d2316d13130d4a8d9f1a1a96f3a03670c4a138"},
+    {file = "langchain_text_splitters-0.2.1.tar.gz", hash = "sha256:06853d17d7241ecf5c97c7b6ef01f600f9b0fb953dd997838142a527a4f32ea4"},
 ]
 
 [[package]]

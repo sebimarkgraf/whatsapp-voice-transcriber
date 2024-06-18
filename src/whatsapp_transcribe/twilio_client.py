@@ -13,9 +13,11 @@ import io
 import logging
 import os
 from base64 import b64encode
+from collections.abc import Iterable
 
 import requests
 from fastapi import HTTPException, Response
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 from twilio.request_validator import RequestValidator
 from twilio.rest import Client
 from twilio.twiml.messaging_response import MessagingResponse
@@ -38,6 +40,9 @@ class TwilioClient:
         self.client = Client(self._account_sid, self._auth_token)
         self.validator = RequestValidator(self._auth_token)
         self._max_len = 1500
+        self._text_splitter = RecursiveCharacterTextSplitter(
+            chunk_size=self._max_len, chunk_overlap=0
+        )
         self._from_number = os.environ["TWILIO_PHONE_NUMBER"]
         self._logger = logging.getLogger(__name__)
 
@@ -92,7 +97,7 @@ class TwilioClient:
             raise HTTPException(status_code=500, detail="Error downloading media")
         return io.BytesIO(response.content)
 
-    def shorten_message(self, message: str):
+    def shorten_message(self, message: str) -> str:
         """
         Utility method to shorten strings to the maximum length defined in the class
 
@@ -110,10 +115,26 @@ class TwilioClient:
             else message
         )
 
+    def split_message(self, message: str) -> Iterable[str]:
+        """
+        Split a message into multiple messages.
+
+        Message size is limited by the max_len attribute.
+
+        Args:
+            message: The message to split.
+        Returns:
+            Iterable[str]: An iterable of messages.
+        """
+        messages = self._text_splitter.split_text(message)
+        return messages
+
     def send_message(self, to: str, body: str):
         self._logger.debug(f"Sending message to {to}")
-        self.client.messages.create(
-            to=to,
-            from_=self._from_number,
-            body=self.shorten_message(body),
-        )
+
+        for message in self.split_message(body):
+            self.client.messages.create(
+                to=to,
+                from_=self._from_number,
+                body=message,
+            )

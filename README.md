@@ -33,3 +33,7 @@ docker-compose --env-file <env-file> up -d
 ```
 
 to start the deployment. You probably need to configure the tunnel to correctly route traffic to `http://whatsapp-transcribe`
+
+
+## Twilio Limits
+Limits for message sizes can be found [here](https://www.twilio.com/docs/conversations/conversations-limits)
