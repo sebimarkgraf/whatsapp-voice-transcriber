@@ -16,6 +16,7 @@ from fastapi import (
 from fastapi.security.api_key import APIKey
 
 from .authentication import setup_api_key_auth
+from .commands import Message, command_handling
 from .summarize import Summarizer
 from .transcribe import TranscriptionService
 from .twilio_client import TwilioClient
@@ -83,7 +84,9 @@ async def twilio_whatsapp(
 
     if MediaUrl0 is None:
         logger.info("No media found, echoing message")
-        return twilio_client.create_return_message(f"Echo: {Body}")
+        return twilio_client.create_return_message(
+            command_handling(Message(body=Body, from_number=From))
+        )
 
     background_tasks.add_task(perform_transcription, TranscriptionTask(MediaUrl0, From))
 
