@@ -51,6 +51,7 @@ class Summarizer:
         Tries to create a short and concise summary.
 
         Args:
+        ----
             text: The text to summarize
 
         Returns:
