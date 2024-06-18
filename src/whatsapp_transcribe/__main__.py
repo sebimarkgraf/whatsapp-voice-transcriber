@@ -34,6 +34,12 @@ logger = logging.getLogger(__name__)
 
 @app.get("/health")
 async def health():
+    """
+    Check the health of the service
+
+    Returns:
+        dict: Status of the service
+    """
     return {"status": "UP"}
 
 
@@ -41,6 +47,19 @@ async def health():
 async def transcribe(
     voice_message: UploadFile, api_key: APIKey = Security(get_api_key)
 ):
+    """
+    Transcribe and summarize a voice message.
+
+    Requires the API key to be passed in the Authorization header.
+
+    Args:
+        voice_message (UploadFile): The voice message to transcribe
+        api_key (APIKey, Security
+        The API key to authenticate the request
+
+    Returns:
+        dict: The transcription and summary of the voice message
+    """
     if not voice_message.content_type.startswith("audio"):
         raise HTTPException(status_code=400, detail="File must be an audio file")
     transcription = transcription_service.transcribe(voice_message.file)
@@ -51,11 +70,22 @@ async def transcribe(
 
 @dataclass()
 class TranscriptionTask:
+    """
+    Data wrapping for the transcription task.
+
+    This contains all information that should be needed to perform a full transcription.
+    Currently, this includes the URL of the voice message and the number
+    that sent the request
+    """
+
     media_url: str
     from_number: str
 
 
 def perform_transcription(task: TranscriptionTask):
+    """
+    Perform a transcription task defined in the arg
+    """
     logger.info("Media URL found, downloading...")
     content = twilio_client.download_media(task.media_url)
     logger.info("Media downloaded.")
@@ -75,6 +105,21 @@ async def twilio_whatsapp(
     x_twilio_signature: Annotated[str | None, Header()] = None,
     MediaUrl0: Annotated[str | None, Form()] = None,
 ):
+    """
+    Handle incoming messages from Twilio WhatsApp
+
+    This endpoint is called by Twilio when a message is received.
+    It will handle the message and respond accordingly.
+
+
+    Args:
+        background_tasks (BackgroundTasks): The background tasks to run
+        req (Request): The request object
+        From (str): The number that sent the message
+        Body (str): The message body
+        x_twilio_signature (str): The Twilio signature
+        MediaUrl0 (str): The URL of the media
+    """
     logger.info(f"Received message from {From}")
     form_ = await req.form()
     twilio_client.validate_request(form_, x_twilio_signature)

@@ -7,6 +7,12 @@ test_dir = Path(__file__).parent
 
 
 def test_transcribe_endpoint_success():
+    """
+    Test the transcribe endpoint
+
+    This performs both the transcription and summarization of a voice message.
+    This does not test the handling of the twilio messages
+    """
     from whatsapp_transcribe.__main__ import app
 
     client = TestClient(app)
