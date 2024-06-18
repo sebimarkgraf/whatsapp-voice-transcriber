@@ -17,7 +17,6 @@ Dependencies are organized using PDM and a PyProject.toml
 
 
 
-
 ## Deployment
 Setup a Twilio account and configure a Whatsapp Sandbox. This will give you all the Twilio settings.
 Next, setup a Cloudflare Account and create a Zero Trust tunnel for the URL where you set Twilio endpoint. If using the docker-copmose, you can point the tunnel locally to `` http://whatsapp-transcribe`` to connect the docker containers.
@@ -50,3 +49,21 @@ to start the deployment.
 
 ## Twilio Limits
 Limits for message sizes can be found [here](https://www.twilio.com/docs/conversations/conversations-limits)
+
+
+## Development
+To start developing simply install the dependencies using [PDM](https://github.com/pdm-project/pdm). For install PDM according to your operating system and then run
+
+``` sh
+pdm install
+```
+which automatically installs package and development dependencies.
+
+Then you can run the tests and create the docs with
+
+``` sh
+make docs test
+```
+
+### Tests
+Currently, the tests require a working Ollama setup. If you don't have Ollama running please install it directly or using docker and adjust ``conftest.py`` to your environment.
