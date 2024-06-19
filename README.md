@@ -2,7 +2,7 @@
 
 # VoiceGist - A WhatsApp Transcription Service
 
-A simple project that create a Twilio Whatsapp Bot to transcribe voice messages.
+A simple project that creates a Twilio Whatsapp Bot to transcribe voice messages.
 
 
 ## Setup
